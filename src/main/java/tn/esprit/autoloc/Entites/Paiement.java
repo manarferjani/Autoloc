@@ -2,9 +2,10 @@ package tn.esprit.autoloc.Entites;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,22 +15,23 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Paiement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPaiement;
 
-    @Column(nullable = false, length = 20)
-    BigDecimal montant;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal montant;
 
-    @Column(nullable = false, length = 20)
-    LocalDate datePaiement;
+    @Column(nullable = false)
+    private LocalDate datePaiement;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    ModePaiement modePaiement;
+    private ModePaiement modePaiement;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_contrat", nullable = false)
+    private Contrat contrat;
 }

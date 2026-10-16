@@ -2,8 +2,8 @@ package tn.esprit.autoloc.Entites;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -14,21 +14,22 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Maintenance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMaintenance;
 
-    @Column(nullable = false, length = 20)
-    LocalDate dateDebut;
+    @Column(nullable = false)
+    private LocalDate dateDebut;
 
-    @Column(nullable = false, length = 20)
-    LocalDate dateFin;
+    @Column(nullable = false)
+    private LocalDate dateFin;
 
-    @Column(nullable = false, length = 20)
-    String description;
+    @Column(nullable = false, length = 100)
+    private String description;
 
-
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_vehicule", nullable = false)
+    private Vehicule vehicule;
 }

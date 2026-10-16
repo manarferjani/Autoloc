@@ -1,10 +1,14 @@
 package tn.esprit.autoloc.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Equipement")
@@ -12,7 +16,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Equipement {
 
     @Id
@@ -20,5 +23,9 @@ public class Equipement {
     private Long idEquipement;
 
     @Column(nullable = false, length = 20)
-    String Libelle;
+    private String libelle;
+
+    @ManyToMany(mappedBy = "equipements", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Vehicule> vehicules = new HashSet<>();
 }

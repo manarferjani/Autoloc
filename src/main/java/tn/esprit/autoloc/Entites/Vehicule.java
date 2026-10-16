@@ -1,12 +1,15 @@
 package tn.esprit.autoloc.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "vehicule")
@@ -18,26 +21,45 @@ public class Vehicule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idVehicule;
+    private Long idVehicule;
 
     @Column(nullable = false, unique = true, length = 20)
-    String immatriculation;
+    private String immatriculation;
 
     @Column(nullable = false, length = 50)
-    String marque;
+    private String marque;
 
     @Column(nullable = false, length = 50)
-    String modele;
+    private String modele;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    CategorieVehicule vehicule;
+    private CategorieVehicule categorie;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    BigDecimal tarifJournalier;
+    private BigDecimal tarifJournalier;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    StatutVehicule statut;
+    private StatutVehicule statut;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_agence", nullable = false)
+    private Agence agence;
+
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Maintenance> maintenances = new HashSet<>();
+
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Reservation> reservations = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "vehicule_equipement",
+            joinColumns = @JoinColumn(name = "id_vehicule"),
+            inverseJoinColumns = @JoinColumn(name = "id_equipement")
+    )
+    private Set<Equipement> equipements = new HashSet<>();
 }

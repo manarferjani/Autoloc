@@ -2,8 +2,8 @@ package tn.esprit.autoloc.Entites;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -12,22 +12,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Employe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idEmploye;
+    private Long idEmploye;
 
     @Column(nullable = false, length = 20)
-    String nom;
+    private String nom;
 
     @Column(nullable = false, length = 50)
-    String prenom;
+    private String prenom;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    RoleEmploye role;
+    private RoleEmploye role;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_agence", nullable = false)
+    private Agence agence;
 }

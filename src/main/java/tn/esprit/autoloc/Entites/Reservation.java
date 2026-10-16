@@ -1,9 +1,10 @@
 package tn.esprit.autoloc.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -14,22 +15,31 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReservation;
 
-    @Column(nullable = false, length = 20)
-    LocalDate dateDebut;
+    @Column(nullable = false)
+    private LocalDate dateDebut;
 
-    @Column(nullable = false, length = 20)
-    LocalDate dateFin;
+    @Column(nullable = false)
+    private LocalDate dateFin;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    StatutReservation statut;
+    private StatutReservation statut;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_vehicule", nullable = false)
+    private Vehicule vehicule;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client", nullable = false)
+    private Client client;
+
+    @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Contrat contrat;
 }
